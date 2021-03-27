@@ -1,0 +1,58 @@
+@import 'taro-ui/dist/style/components/flex.scss';
+
+.jp {
+  // calendar
+  &-cal {
+    text-align: center;
+    background-color: white;
+    font-size: 30px;
+
+    &-arrow {
+      @include flex(0, 0, 17px);
+
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: inline-block;
+      background-size: 16px 24px;
+      background-position: center;
+      background-color: #d2dcefb3;
+      background-repeat: no-repeat;
+      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAYAAADzoH0MAAAAAXNSR0IArs4c6QAAAnFJREFUOBGVVF1rE0EUnXt3tzFtWmqjKYKfqIhVa1L8FQVRWtwnXwRhidXGDwQf81oCUQMioZRCHwNSgiD4lD9QSYVKsA8KbaW1jbamX8adnWsmMnESbYz7cs6ee8/ZnZm7y9h/Xk/Gs70TE9lOZQNFWsGx1IvDJoozxNDttNpmHOfyTssBj59PHxceP6keREDlYPvBGUMJzTD5LHuKhHtC70EEQe72atMAIoLu0MWzRPxInZnEdxZib2I37L2XEI/HsSvYd44AQrqZIW5b3J8fHR0sS/2ve5DJZIzFFexnSD262QAs+c1js45zyVU6KqIwnU5bS58x0mhGhusbaz153Sw9dW+QSr3yCdwJe4wCKlCigbAWiw7PAYDQdclrAclkxk8+iDBifr3JMq3lO86VQsVMuq549RQSU687mOcNANE+VfiFxuLd6NX3e5llD8qjskqb54E8n24mk5Yf3B6ab2auBsgGC8Q7QOJ1AS6ExrSZ12s6r57CyIi99cNgswywtkkIzDB2eSSdftmuGxp57RgfOfY38HlvRWVNqgmYsDb57sDkZK5hb1RHZQ9+U8bu37S/MtOc0zUg8G2U1yOV4WrTdcXrAqT4MDq0yokXVINEwb32pS9WOJfLmboueW0OGgtP05mj3IXTum6iuXHogDtr27an9D/eQBVijr2AiB/VvUQuePenNXZBfmhKrxEl6Hjv1vAHA2lJ1wRBcH9vf5+cH6k3DZANsei1eWCwIrm6uOf1Jsenq8v7Z4ActFJxrsBMo6gC0GAebPHq/Z6bqJoVyn/EQpGFK08MmF2B/Oj1wZKqtYzxeM5MJKY6dMNPQnnePR8FubkAAAAASUVORK5CYII=");
+
+      &-right {
+        transform: rotate(180deg);
+      }
+    }
+
+    &-item-wrapper {
+      $width: (1/7) * 100%;
+      @include flex(0, 0, $width);
+      max-width: $width;
+      margin: 5px 0;
+    }
+
+    &-item {
+      width: 72px !important;
+      height: 72px !important;
+      line-height: 72px !important;
+      margin: 0 auto;
+
+      border-radius: 50%;
+      //background-color: white;
+      color: grey;
+
+      &.selected {
+        background-color: #5687e4;
+      }
+
+      &.highlight {
+        color: rgba(0, 0, 0, 0.61);
+        background-color: rgba(217, 217, 217, 0.3);
+        //background-color: #d2dcef;
+      }
+    }
+
+
+  }
+}
