@@ -5,8 +5,12 @@ import "./style/calendar.scss"
 import CalendarController from "./controller";
 import Calendar, {JpCalendarProps, JpCalendarState} from "./props/calendar";
 import buildDayjs from "./common/helper";
+import CalendarBody from "./body";
 
 const now = new Date();
+const log =  (...data: any[]) => {
+  console.log(...data);
+}
 
 const defaultProps: JpCalendarProps = {
   xYear: now.getFullYear(),
@@ -54,11 +58,13 @@ class JpCalendar extends Component<JpCalendarProps, JpCalendarState> {
 
     const {thisYear, thisMonth} = this.state;
 
+    log(thisYear, thisMonth);
+
     return (
 
       <View className='jp-cal'>
         <CalendarController xYear={thisYear} xMonth={thisMonth} handleMonthChange={this.handleMonthChange} />
-        {/*<CalendarBody xYear={thisYear} xMonth={thisMonth} onSelectedDate={this.handleSelectedDate} />*/}
+        <CalendarBody xYear={thisYear} xMonth={thisMonth} onSelectedDate={this.handleSelectedDate} />
       </View>
 
     );

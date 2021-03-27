@@ -2,10 +2,9 @@ import {View} from "@tarojs/components";
 import {Component} from "react";
 import "taro-ui/dist/style/components/flex.scss";
 import "./style/calendar.scss"
-import JpCalendar, {JpCalendarBodyProps} from "./props/calendar";
+import JpCalendar, {Calendar, JpCalendarBodyProps} from "./props/calendar";
 import {TYPE_NEXT_MONTH, TYPE_NOW_MONTH, TYPE_PRE_MONTH} from "./props/const";
-import Day = JpCalendar.Day;
-import dayjs = require("dayjs");
+import dayjs from "dayjs";
 
 class CalendarBody extends Component<JpCalendarBodyProps> {
 
@@ -14,13 +13,12 @@ class CalendarBody extends Component<JpCalendarBodyProps> {
     this.onSelectedDate = this.onSelectedDate.bind(this);
   }
 
-  onSelectedDate = (d: Day) => {
+  onSelectedDate = (d: JpCalendar.Day) => {
     this.props.onSelectedDate(d);
   };
 
   // TODO 用 dayjs 代替之前的逻辑
   toXMonth = (xYear, xMonth: number) => {
-    const days: Array<Day> = [];
 
     // today
     const d = new Date();
@@ -30,7 +28,9 @@ class CalendarBody extends Component<JpCalendarBodyProps> {
 
     // 上月最后一天是周几
     const leftDaysLastMonth = (date.day() + 6) % 7;
+    const days: Array<JpCalendar.Day> = [];
     console.log(date.startOf('w').day(), "leftDaysLastMonth", leftDaysLastMonth);
+    console.log("上个月", days);
     for (let i = 1; i <= leftDaysLastMonth + 1; i++) {
       days.push({
         d: date.add(-i, 'day').startOf('day'),
@@ -38,32 +38,48 @@ class CalendarBody extends Component<JpCalendarBodyProps> {
       });
     }
     days.reverse();
+    console.log("上个月", days);
+    
 
     // 本月多少天
     var daysOfThisMonth = date.daysInMonth();
+    const daysThisMonth: Array<JpCalendar.Day> = [];
     for (let i = 0; i < daysOfThisMonth; i++) {
       const thisDate = date.add(i, 'day').startOf('day');
+      daysThisMonth.push({
+        d: thisDate,
+        type: TYPE_NOW_MONTH,
+      });
       days.push({
         d: thisDate,
         type: TYPE_NOW_MONTH,
       });
     }
+    console.log("本月", daysThisMonth);
+    
 
     // 下个月
     const total = 6 * 7;
+    const daysNextMonth: Array<JpCalendar.Day> = [];
     for (let i = total; total > days.length; i--) {
       var thisDate = lastDate.add(total - i + 1, 'day').startOf('day');
+      daysNextMonth.push({
+        d: thisDate,
+        type: TYPE_NEXT_MONTH,
+      });
       days.push({
         d: thisDate,
         type: TYPE_NEXT_MONTH,
       });
     }
+    console.log("下个月", daysNextMonth);
+    
 
     return days;
   };
 
   toXMonth2 = (xYear, xMonth: number) => {
-    const days: Day[] = [];
+    const days: JpCalendar.Day[] = [];
 
     const date = new Date();
     const currMonth = date.getMonth() + 1;
@@ -147,9 +163,10 @@ class CalendarBody extends Component<JpCalendarBodyProps> {
     const {xYear, xMonth} = this.props;
 
     let xMonthDays = this.toXMonth(xYear, xMonth);
-    const tDayDoms = xMonthDays.map((d: Day) => {
+    console.log(xMonthDays);
+    const tDayDoms = xMonthDays.map((d: Calendar.Day) => {
       return (
-        <View className='at-col jp-cal-item-wrapper'>
+        <View className='jp-cal-item-wrapper'>
           <View className={
             d.isSelectedDay
               ? style.selectedItem

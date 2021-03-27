@@ -1,8 +1,10 @@
 import {Component} from 'react'
 import {View} from '@tarojs/components'
 
+import "taro-ui/dist/style/components/calendar.scss";
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './index.scss'
+import '../components/calendar/style/calendar.scss'
 import JpCalendar from "../components/calendar/calendar";
 import * as React from "react";
 import Calendar from "taro-ui/types/calendar";
