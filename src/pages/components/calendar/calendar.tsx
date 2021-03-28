@@ -31,8 +31,11 @@ class JpCalendar extends Component<JpCalendarProps, JpCalendarState> {
   }
 
   handleSelectedDate = (d: Calendar.Day) => {
-    const {year, month} = d;
+    console.log("calendar select", d);
+    const year = d.d.year();
+    const month = d.d.month() + 1;
     if (year && month) {
+      console.log("calendar setState", year, month);
       this.setState({thisYear: year, thisMonth: month});
     }
   };

@@ -14,6 +14,8 @@ class CalendarBody extends Component<JpCalendarBodyProps> {
   }
 
   onSelectedDate = (d: JpCalendar.Day) => {
+    console.log("body select", d);
+    // d.isSelectedDay = true;
     this.props.onSelectedDate(d);
   };
 
@@ -22,6 +24,11 @@ class CalendarBody extends Component<JpCalendarBodyProps> {
 
     // today
     const d = new Date();
+    const currYear = d.getFullYear();
+    const currMonth = d.getMonth();
+    const currDay = d.getDate();
+    console.log(currYear,currMonth,currDay);
+    
     d.setFullYear(xYear, xMonth - 1, 1);
     var date = dayjs(d).startOf('month');
     var lastDate = date.endOf('month').startOf('day');
@@ -29,8 +36,6 @@ class CalendarBody extends Component<JpCalendarBodyProps> {
     // 上月最后一天是周几
     const leftDaysLastMonth = (date.day() + 6) % 7;
     const days: Array<JpCalendar.Day> = [];
-    console.log(date.startOf('w').day(), "leftDaysLastMonth", leftDaysLastMonth);
-    console.log("上个月", days);
     for (let i = 1; i <= leftDaysLastMonth + 1; i++) {
       days.push({
         d: date.add(-i, 'day').startOf('day'),
@@ -38,43 +43,33 @@ class CalendarBody extends Component<JpCalendarBodyProps> {
       });
     }
     days.reverse();
-    console.log("上个月", days);
     
 
     // 本月多少天
     var daysOfThisMonth = date.daysInMonth();
-    const daysThisMonth: Array<JpCalendar.Day> = [];
     for (let i = 0; i < daysOfThisMonth; i++) {
       const thisDate = date.add(i, 'day').startOf('day');
-      daysThisMonth.push({
+      const t = {
         d: thisDate,
         type: TYPE_NOW_MONTH,
-      });
-      days.push({
-        d: thisDate,
-        type: TYPE_NOW_MONTH,
-      });
+        isCurrentDay: date.year() == currYear && date.month() == currMonth && thisDate.date() == currDay 
+      };
+      console.log(date.year(),date.month(), thisDate.date());
+      console.log("t", t);
+      days.push(t);
     }
-    console.log("本月", daysThisMonth);
     
 
     // 下个月
     const total = 6 * 7;
-    const daysNextMonth: Array<JpCalendar.Day> = [];
     for (let i = total; total > days.length; i--) {
       var thisDate = lastDate.add(total - i + 1, 'day').startOf('day');
-      daysNextMonth.push({
-        d: thisDate,
-        type: TYPE_NEXT_MONTH,
-      });
       days.push({
         d: thisDate,
         type: TYPE_NEXT_MONTH,
       });
     }
-    console.log("下个月", daysNextMonth);
     
-
     return days;
   };
 
