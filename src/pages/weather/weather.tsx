@@ -55,7 +55,15 @@ export default class DailyWeather extends Component<DailyWeatherProps, DailyWeat
                 txt = "后天";
             } else {
                 const weekDay = day.day();
-                txt = weekDay == 0 ? "周日" : "周" + weekDay;
+                switch (weekDay) {
+                    case 0: txt = "周日"; break;
+                    case 1: txt = "周一"; break;
+                    case 2: txt = "周二"; break;
+                    case 3: txt = "周三"; break;
+                    case 4: txt = "周四"; break;
+                    case 5: txt = "周五"; break;
+                    case 6: txt = "周六"; break;
+                }
             }
             const dayWeatherIcon = "http://mat1.gtimg.com/pingjs/ext2020/weather/pc/icon/weather/day/" + d.day_weather_code + ".png";
             const nightWeatherIcon = "http://mat1.gtimg.com/pingjs/ext2020/weather/pc/icon/weather/day/" + d.night_weather_code + ".png";
