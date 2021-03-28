@@ -6,6 +6,8 @@ export interface DailyWeatherProps {
 }
 
 export interface DailyWeatherState {
+
+    chart: any
     
 
 }

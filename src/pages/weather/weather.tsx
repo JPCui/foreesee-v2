@@ -1,32 +1,76 @@
 import { Component } from 'react'
 import { Image, View } from '@tarojs/components'
-
 import "taro-ui/dist/style/components/calendar.scss";
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import '../components/calendar/style/calendar.scss'
 import "taro-ui/dist/style/components/grid.scss";
 import "taro-ui/dist/style/components/flex.scss";
+import "./weather.scss";
 import * as React from "react";
 import Calendar from "taro-ui/types/calendar";
 import * as dayjs from "dayjs";
 import { DailyWeatherProps, DailyWeatherState, DailyWeatherModel } from './weather.d';
-import { AtAvatar } from 'taro-ui';
+import { EChart } from "echarts-taro3-react";
 
 export default class DailyWeather extends Component<DailyWeatherProps, DailyWeatherState> {
     constructor(props) {
         super(props);
     }
 
+    chart: any;
+
     onSelectedDate = async (item: { value: Calendar.SelectedDate }) => {
         console.log(item.value);
         const { start, end } = item.value;
     };
 
+    rederChart = (node: any) => {
+        console.log(node);
+
+        this.chart = node;
+    };
+
+    getChartOption = () => {
+
+    };
 
     componentWillMount() {
     }
 
     componentDidMount() {
+        // const option = {
+        //     xAxis: {
+        //         show: false,
+        //         type: "category",
+        //         data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Sun2"],
+        //         axisTick: {
+        //             length: 10
+        //         }
+        //     },
+        //     yAxis: {
+        //         show: false,
+        //         type: "value",
+        //     },
+        //     grid: {
+        //         left: 0,
+        //         right: 0,
+        //     },
+        //     series: [
+        //         {
+        //             data: [120, 200, 150, 80, 70, 110, 130, 230],
+        //             type: "line",
+        //             showBackground: true,
+        //             itemStyle: {
+        //                 normal: { label: { show: true } }
+        //             },
+        //             backgroundStyle: {
+        //                 color: "rgba(220, 220, 220, 0.8)",
+        //             },
+        //         },
+        //     ],
+        // };
+
+        // this.chart.refresh(option);
     }
 
     componentWillUnmount() { }
@@ -65,10 +109,10 @@ export default class DailyWeather extends Component<DailyWeatherProps, DailyWeat
                     case 6: txt = "周六"; break;
                 }
             }
-            const dayWeatherIcon = "http://mat1.gtimg.com/pingjs/ext2020/weather/pc/icon/weather/day/" + d.day_weather_code + ".png";
-            const nightWeatherIcon = "http://mat1.gtimg.com/pingjs/ext2020/weather/pc/icon/weather/day/" + d.night_weather_code + ".png";
+            const dayWeatherIcon = "https://mat1.gtimg.com/pingjs/ext2020/weather/pc/icon/weather/day/" + d.day_weather_code + ".png";
+            const nightWeatherIcon = "https://mat1.gtimg.com/pingjs/ext2020/weather/pc/icon/weather/day/" + d.night_weather_code + ".png";
             const style = {
-                "width": "20%",
+                // "width": "20%",
                 "padding": "11px 0 25px",
                 "color": "#333",
                 "backgroundColor": "",
@@ -80,24 +124,41 @@ export default class DailyWeather extends Component<DailyWeatherProps, DailyWeat
             if (txt == "昨天") {
                 style.color = "#b2b2b2";
             }
+
             return (
-                <View className='at-col at-col-2' style={style}>
-                    <View style={{ "marginBottom": "10px" }}>{txt}</View>
-                    <View style={{ "marginBottom": "10px" }}>{dateTxt}</View>
-                    <View style={{ "marginBottom": "20px" }}>{d.day_weather}</View>
-                    <Image src={dayWeatherIcon} style={{ "width": "30px", "height": "30px" }}></Image>
-                    <View>&nbsp;</View>
-                    <Image src={nightWeatherIcon} style={{ "width": "30px", "height": "30px" }}></Image>
+                <View className='w-col at-col at-col-2 ' style={style}>
+                    <View style={{ height: "15px", "marginBottom": "10px" }}>{txt}</View>
+                    <View style={{ height: "15px", "marginBottom": "10px" }}>{dateTxt}</View>
+                    <View style={{ height: "15px", "marginBottom": "20px" }}>{d.day_weather}</View>
+                    <View style={{ "marginBottom": "15px" }}>
+                        <Image src={dayWeatherIcon} style={{ "width": "30px", "height": "30px" }}></Image>
+                    </View>
+                    <View style={{ height: "15px", "marginBottom": "10px", color:"orange" }}>{d.max_degree}</View>
+                    <View style={{ height: "15px", "marginBottom": "10px", color: 'silver' }}>↓</View>
+                    <View style={{ height: "15px", "marginBottom": "20px", color: "#4fc3f7" }}>{d.min_degree}</View>
+                    <View style={{ "marginBottom": "10px" }}>
+                        <Image src={nightWeatherIcon} style={{ "width": "30px", "height": "30px" }}></Image>
+                    </View>
                     <View style={{ "marginBottom": "20px" }}>{d.night_weather}</View>
-                    <View style={{  }}>{d.night_wind_direction}</View>
-                    <View style={{  }}>{d.night_wind_power}</View>
+                    <View style={{}}>{d.night_wind_direction}</View>
+                    <View style={{}}>{d.night_wind_power}</View>
 
                 </View>
             );
         });
+
         return (
-            <View className='at-row' style={{ "minHeight": "300px", "overflow": "scroll", textAlign: "center" }}>
-                {dailyWeatherDoms}
+            <View style={{ position: 'relative', overflowX: 'auto', width: '100%' }}>
+                <View className="chartBox">
+                    <View className='at-row' style={{ "minHeight": "300px", textAlign: "center" }}>
+                        {dailyWeatherDoms}
+                    </View>
+                    {/* <View className="flow">
+                        <View className="canvas">
+                        </View>
+                        <EChart ref={this.rederChart} canvasId='gauge-chart' />
+                    </View> */}
+                </View>
             </View>
         )
     }

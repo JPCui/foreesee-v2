@@ -76,11 +76,11 @@ export default class Index extends Component<IndexProps, IndexState> {
     const dailyWeathers = this.state.dailyWeathers;
     return (
       <View className='index'>
-        <View className='at-row' style={{"minHeight": "300px", "overflow": "scroll", textAlign: "center"}}>
+        <View className='at-row' style={{"minHeight": "300px", textAlign: "center"}}>
           <DailyWeather dailyWeathers={dailyWeathers} />
         </View>
 
-        <AtCalendar selectedDate={selectedDate} onSelectDate={this.onSelectedDate} />
+        {/* <AtCalendar selectedDate={selectedDate} onSelectDate={this.onSelectedDate} /> */}
         {/* <JpCalendar /> */}
       </View>
     )

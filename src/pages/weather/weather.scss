@@ -1,0 +1,32 @@
+@import 'taro-ui/dist/style/components/flex.scss';
+
+.chartBox {
+
+    .w-col {
+        width: calc(100 / 6)vw;
+        // flex: 1;
+    }
+
+
+    .flow {
+        position: absolute;
+        top: 220px;
+        left: '0';
+        right: '0';
+    }
+
+    .canvas {
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    canvas {
+        display: block;
+    }
+}
