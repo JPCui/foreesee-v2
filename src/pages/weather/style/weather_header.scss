@@ -1,18 +1,29 @@
 .header {
 
+  width: 100%;
   color: white;
 
-  //
+  .label {
+    padding-top: 20px;
+    font-size: 30px;
+    .location {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      background-size: 30px;
+      margin-right: 10px;
+      vertical-align: middle;
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+DQogICAgPGRlZnM+DQogICAgICAgIDxwYXRoIGlkPSJhIiBkPSJNMCA2LjJWMGgxMHYxMi40SDB6IiAvPg0KICAgIDwvZGVmcz4NCiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyIDEpIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPg0KICAgICAgICA8bWFzayBpZD0iYiIgZmlsbD0iI2ZmZiI+DQogICAgICAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNhIiAvPg0KICAgICAgICA8L21hc2s+DQogICAgICAgIDxwYXRoIGQ9Ik01IDdjLTEuMTA0IDAtMi0uODk2LTItMnMuODk2LTIgMi0yIDIgLjg5NiAyIDItLjg5NiAyLTIgMm01LTJjMC0yLjc2LTIuMjM4LTUtNS01UzAgMi4yNCAwIDVjMCAxLjEzLjM5IDIuMTYyIDEuMDIyIDNIMWwzLjIyIDQuMDIzYy40LjUgMS4xNi41IDEuNTYgMEw5IDhoLS4wMjJDOS42MSA3LjE2MiAxMCA2LjEzIDEwIDUiIGZpbGw9IiNGRkYiIG1hc2s9InVybCgjYikiIC8+DQogICAgPC9nPg0KPC9zdmc+);
+    }
+  }
 
   .left {
     margin: 50px 0 0 50px;
-    height: 110px;
     line-height: 110px
   }
 
   .right {
     margin: 70px 0 0 90px;
-    height: 110px;
   }
 
   .tip {

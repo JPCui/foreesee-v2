@@ -10,6 +10,7 @@ export const WindDirection = [
   "北风"
 ];
 export interface WeatherHeaderProps {
+  label: string;
   /**
    * 天气
    */

@@ -4,6 +4,7 @@ import { WeatherHeaderProps } from "./weather_header";
 export interface WeatherProps {
   province: string;
   city: string;
+  district?: string;
 }
 
 export interface WeatherState {

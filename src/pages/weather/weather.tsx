@@ -13,6 +13,8 @@ import { WeatherProps, WeatherState } from "./props/weather";
 import { DailyWeather } from "./daily_weather";
 import WeatherHeader from "./weather_header";
 import { WeatherHeaderProps } from "./props/weather_header";
+// @ts-ignore
+import Taro from "@tarojs/taro";
 
 export default class Weather extends React.Component<
   WeatherProps,
@@ -22,6 +24,7 @@ export default class Weather extends React.Component<
     super(props);
     this.state = {
       weatherHeaderProps: {
+        label: "",
         degree: "",
         weather: "",
         weather_code: "",
@@ -42,6 +45,12 @@ export default class Weather extends React.Component<
   componentWillMount() {
     const { province, city } = this.props;
     this.getDailyWeathers(province, city);
+
+    const _this = this;
+    Taro.eventCenter.on("onSelectItem", item => {
+      console.log("listen: ", item);
+      _this.getDailyWeathers(item.province, item.city);
+    });
   }
 
   componentDidMount() {}
@@ -83,10 +92,13 @@ export default class Weather extends React.Component<
 
   render() {
     console.log("state", this.state);
+    const { province, city, district } = this.props;
+    const showCity = district ? city + " " + district : province + " " + city;
     const { weatherHeaderProps: weatherHeader, dailyWeathers } = this.state;
     return (
       <View style={{ width: "100%" }}>
         <WeatherHeader
+          label={showCity}
           degree={weatherHeader.degree}
           weather={weatherHeader.weather}
           weather_code={weatherHeader.weather_code}

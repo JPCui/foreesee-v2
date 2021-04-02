@@ -9,14 +9,19 @@ import "taro-ui/dist/style/components/flex.scss";
 import "./index.scss";
 import "../components/calendar/style/calendar.scss";
 import { IndexProps, IndexState } from "./props";
-import * as dayjs from "dayjs";
 import call from "../../service/request";
-import Service from "../../service/api";
 // @ts-ignore
-import { DailyWeatherModel } from "../weather/props/daily_weather";
-import Calendar from "taro-ui/types/calendar";
-import MapService, { GetLocationResp } from "../../service/map";
+import MapService, {
+  GetLocationModel,
+  GetLocationResp
+} from "../../service/map";
 import Weather from "../weather/weather";
+import { AtDrawer } from "taro-ui";
+// @ts-ignore
+import Taro from "@tarojs/taro";
+
+const DEFAULT_PROVICE = "北京";
+const DEFAULT_CITY = DEFAULT_PROVICE;
 
 const defaultProps: IndexProps = {
   almanac: {
@@ -28,9 +33,12 @@ const defaultProps: IndexProps = {
 export default class Index extends Component<IndexProps, IndexState> {
   constructor(props) {
     super(props);
-    this.setState({
+    this.state = {
+      province: DEFAULT_PROVICE,
+      city: DEFAULT_CITY
       // http://opendata.baidu.com/api.php?query=2020-4&resource_id=6018&format=json
-    });
+    };
+    this.getPosition();
   }
 
   // onSelectedDate = async (item: { value: Calendar.SelectedDate }) => {
@@ -42,15 +50,23 @@ export default class Index extends Component<IndexProps, IndexState> {
   // };
 
   getPosition = async () => {
-    const location: GetLocationResp = (await call(
-      MapService.GetLocation
-    )) as GetLocationResp;
-    const { province, city } = location.result.ad_info;
+    const location: GetLocationModel = await MapService.GetLocation();
+    const { province, city } = location.ad_info;
+    this.setState({ province, city });
   };
 
-  componentWillMount() {}
+  componentWillMount() {
+    this.getPosition();
+  }
 
-  componentDidMount() {}
+  componentDidMount() {
+    const _this = this;
+    Taro.eventCenter.on("onSelectItem", item => {
+      console.log("listen: ", item);
+      const { province, city } = item;
+      _this.setState({ province, city });
+    });
+  }
 
   componentWillUnmount() {}
 
@@ -59,13 +75,14 @@ export default class Index extends Component<IndexProps, IndexState> {
   componentDidHide() {}
 
   render() {
+    const { province, city } = this.state;
     return (
       <View className="index">
         <View
           className="at-row"
           style={{ minHeight: "300px", textAlign: "center" }}
         >
-          <Weather province="北京" city="北京" />
+          <Weather province={province} city={city} />
         </View>
 
         {/* <AtCalendar selectedDate={selectedDate} onSelectDate={this.onSelectedDate} /> */}

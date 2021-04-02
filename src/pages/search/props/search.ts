@@ -12,4 +12,5 @@ export interface SearchProps {
 
 export interface SearchState {
   keyword: string;
+  items: {};
 }

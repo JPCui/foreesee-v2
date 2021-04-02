@@ -6,8 +6,10 @@ export interface Almanac {
 }
 
 export interface IndexState {
-  almanac: Almanac;
-  dailyWeathers: DailyWeatherModel[];
+  province: string;
+  city: string;
+  // almanac: Almanac;
+  // dailyWeathers: DailyWeatherModel[];
 }
 
 export interface IndexProps {

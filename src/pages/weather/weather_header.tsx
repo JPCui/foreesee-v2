@@ -8,6 +8,7 @@ import "taro-ui/dist/style/components/flex.scss";
 import "./style/weather.scss";
 import { WeatherHeaderProps, WindDirection } from "./props/weather_header";
 import "./style/weather_header.scss";
+import { navigateTo } from "../../sdk/page";
 
 export default class WeatherHeader extends React.Component<WeatherHeaderProps> {
   constructor(props) {
@@ -24,8 +25,15 @@ export default class WeatherHeader extends React.Component<WeatherHeaderProps> {
 
   componentDidHide() {}
 
+  toSearch() {
+    navigateTo({
+      url: "/pages/search/index"
+    });
+  }
+
   render() {
     const {
+      label,
       weather,
       weather_code,
       degree,
@@ -46,39 +54,33 @@ export default class WeatherHeader extends React.Component<WeatherHeaderProps> {
       ? `https://mat1.gtimg.com/pingjs/ext2020/weather/pc/icon/currentweather/day/${weather_code}.png`
       : null;
     return (
-      <View style={{ width: "100%" }}>
-        <View
-          className={`header weather_bg weather_bg_${weather_code}`}
-          style={{
-            // backgroundImage: `${bg}`,
-            height: "200px",
-            color: "white"
-          }}
-        >
-          <View className="at-row">
-            {/*<View>{weather}</View>*/}
-            <View className="at-col left">
-              {weatherIcon && (
-                <Image
-                  src={weatherIcon}
-                  style={{ width: "100px", height: "100px" }}
-                />
-              )}
-            </View>
-            <View className="at-col right">
-              <View className="tip-lg">{degree}°</View>
-              <View className="tip-md">{weather}</View>
-              <View
-                className="tip-sm"
-                style={{
-                  display: "inline",
-                  position: "absolute",
-                  right: "30px"
-                }}
-              >
-                湿度 {humidity}% &nbsp;
-                {WindDirection[wind_direction]} {wind_power}级
-              </View>
+      <View
+        className={`header weather_bg weather_bg_${weather_code}`}
+        style={{
+          // backgroundImage: `${bg}`,
+          color: "white"
+        }}
+      >
+        <View className="label" onClick={this.toSearch}>
+          <View className="location" />
+          {label}&nbsp;▼
+        </View>
+        <View className="at-row">
+          {/*<View>{weather}</View>*/}
+          <View className="at-col left">
+            {weatherIcon && (
+              <Image
+                src={weatherIcon}
+                style={{ width: "100px", height: "100px" }}
+              />
+            )}
+          </View>
+          <View className="at-col right">
+            <View className="tip-lg">{degree}°</View>
+            <View className="tip-md">{weather}</View>
+            <View className="tip-sm">
+              湿度 {humidity}% &nbsp;
+              {WindDirection[wind_direction]} {wind_power}级
             </View>
           </View>
         </View>
