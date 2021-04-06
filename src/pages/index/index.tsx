@@ -78,10 +78,7 @@ export default class Index extends Component<IndexProps, IndexState> {
     const { province, city } = this.state;
     return (
       <View className="index">
-        <View
-          className="at-row"
-          style={{ minHeight: "300px", textAlign: "center" }}
-        >
+        <View style={{ minHeight: "300px", textAlign: "center" }}>
           <Weather province={province} city={city} />
         </View>
 

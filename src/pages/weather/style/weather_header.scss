@@ -2,9 +2,9 @@
 
   width: 100%;
   color: white;
+  padding: 20px 0 20px;
 
   .label {
-    padding-top: 20px;
     font-size: 30px;
     .location {
       display: inline-block;
@@ -31,7 +31,7 @@
       font-size: 30px;
     }
     &-md {
-      font-size: 60px;
+      font-size: 50px;
     }
     &-lg {
       font-size: 160px;

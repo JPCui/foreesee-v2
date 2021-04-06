@@ -15,6 +15,8 @@ import WeatherHeader from "./weather_header";
 import { WeatherHeaderProps } from "./props/weather_header";
 // @ts-ignore
 import Taro from "@tarojs/taro";
+import Living from "./living";
+import { AtNoticebar } from "taro-ui";
 
 export default class Weather extends React.Component<
   WeatherProps,
@@ -38,7 +40,8 @@ export default class Weather extends React.Component<
         wind_power: "",
         wind_direction: ""
       },
-      dailyWeathers: []
+      dailyWeathers: [],
+      livings: []
     };
   }
 
@@ -84,9 +87,12 @@ export default class Weather extends React.Component<
     const weatherHeaderProps: WeatherHeaderProps = {
       ...observe
     };
+
+    const livings = weatherResp.data.index;
     this.setState({
       weatherHeaderProps,
-      dailyWeathers
+      dailyWeathers,
+      livings
     });
   };
 
@@ -94,9 +100,13 @@ export default class Weather extends React.Component<
     console.log("state", this.state);
     const { province, city, district } = this.props;
     const showCity = district ? city + " " + district : province + " " + city;
-    const { weatherHeaderProps: weatherHeader, dailyWeathers } = this.state;
+    const {
+      livings,
+      weatherHeaderProps: weatherHeader,
+      dailyWeathers
+    } = this.state;
     return (
-      <View style={{ width: "100%" }}>
+      <View>
         <WeatherHeader
           label={showCity}
           degree={weatherHeader.degree}
@@ -106,7 +116,14 @@ export default class Weather extends React.Component<
           wind_power={weatherHeader.wind_power}
           wind_direction={weatherHeader.wind_direction}
         />
-        <DailyWeather dailyWeathers={dailyWeathers} />
+        <View>
+          <DailyWeather dailyWeathers={dailyWeathers} />
+        </View>
+        <Living items={livings} />
+        <View className="footer">
+          <AtNoticebar>数据来源于腾讯天气</AtNoticebar>
+          <View>Copyright © 2021. All Rights Reserved</View>
+        </View>
       </View>
     );
   }

@@ -136,7 +136,7 @@ export class DailyWeather extends Component<
         d.night_weather_code +
         ".png";
       const style = {
-        // "width": "20%",
+        width: "100%",
         padding: "11px 0 25px",
         color: "#333",
         backgroundColor: "",

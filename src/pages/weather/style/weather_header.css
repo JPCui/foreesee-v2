@@ -1,8 +1,8 @@
 .header {
   width: 100%;
-  color: white; }
+  color: white;
+  padding: 20px 0 20px; }
   .header .label {
-    padding-top: 20px;
     font-size: 30px; }
     .header .label .location {
       display: inline-block;
@@ -20,7 +20,7 @@
   .header .tip-sm {
     font-size: 30px; }
   .header .tip-md {
-    font-size: 60px; }
+    font-size: 50px; }
   .header .tip-lg {
     font-size: 160px; }
 

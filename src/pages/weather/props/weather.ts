@@ -1,5 +1,6 @@
 import { DailyWeatherModel } from "./daily_weather";
 import { WeatherHeaderProps } from "./weather_header";
+import { LivingModel } from "./living";
 
 export interface WeatherProps {
   province: string;
@@ -10,4 +11,5 @@ export interface WeatherProps {
 export interface WeatherState {
   weatherHeaderProps: WeatherHeaderProps;
   dailyWeathers: DailyWeatherModel[];
+  livings: LivingModel[];
 }

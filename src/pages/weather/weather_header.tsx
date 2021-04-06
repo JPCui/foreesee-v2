@@ -76,8 +76,13 @@ export default class WeatherHeader extends React.Component<WeatherHeaderProps> {
             )}
           </View>
           <View className="at-col right">
-            <View className="tip-lg">{degree}°</View>
-            <View className="tip-md">{weather}</View>
+            <View className="tip-lg">
+              {degree}°
+              <View className="tip-md" style={{ display: "inline-block" }}>
+                {weather}
+              </View>
+            </View>
+
             <View className="tip-sm">
               湿度 {humidity}% &nbsp;
               {WindDirection[wind_direction]} {wind_power}级
