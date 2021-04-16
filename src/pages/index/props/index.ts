@@ -1,4 +1,5 @@
 import { DailyWeatherModel } from "../../weather/props/daily_weather";
+import { CityInfo } from "../../search/props/search";
 
 export interface Almanac {
   avoid: string;
@@ -6,8 +7,7 @@ export interface Almanac {
 }
 
 export interface IndexState {
-  province: string;
-  city: string;
+  city: CityInfo;
   // almanac: Almanac;
   // dailyWeathers: DailyWeatherModel[];
 }

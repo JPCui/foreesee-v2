@@ -1,0 +1,17 @@
+#search-box .search-block {
+  margin-top: 50px; }
+#search-box .search-select-area {
+  margin: 0 20px; }
+#search-box .search-item-title {
+  margin-left: 20px; }
+#search-box .search-item {
+  background-color: #f2f2f2;
+  border-radius: 50px;
+  width: 220px;
+  height: 64px;
+  line-height: 64px;
+  font-size: 32px;
+  margin: 20px auto;
+  text-align: center; }
+
+/*# sourceMappingURL=search.css.map */

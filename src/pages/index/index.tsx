@@ -19,6 +19,7 @@ import Weather from "../weather/weather";
 import { AtDrawer } from "taro-ui";
 // @ts-ignore
 import Taro from "@tarojs/taro";
+import { CityInfo } from "../search/props/search";
 
 const DEFAULT_PROVICE = "北京";
 const DEFAULT_CITY = DEFAULT_PROVICE;
@@ -34,8 +35,7 @@ export default class Index extends Component<IndexProps, IndexState> {
   constructor(props) {
     super(props);
     this.state = {
-      province: DEFAULT_PROVICE,
-      city: DEFAULT_CITY
+      city: new CityInfo(DEFAULT_PROVICE, DEFAULT_CITY, "")
       // http://opendata.baidu.com/api.php?query=2020-4&resource_id=6018&format=json
     };
     this.getPosition();
@@ -52,7 +52,7 @@ export default class Index extends Component<IndexProps, IndexState> {
   getPosition = async () => {
     const location: GetLocationModel = await MapService.GetLocation();
     const { province, city } = location.ad_info;
-    this.setState({ province, city });
+    this.setState({ city: new CityInfo(province, city, "") });
   };
 
   componentWillMount() {
@@ -63,8 +63,7 @@ export default class Index extends Component<IndexProps, IndexState> {
     const _this = this;
     Taro.eventCenter.on("onSelectItem", item => {
       console.log("listen: ", item);
-      const { province, city } = item;
-      _this.setState({ province, city });
+      _this.setState({ city: item });
     });
   }
 
@@ -75,11 +74,11 @@ export default class Index extends Component<IndexProps, IndexState> {
   componentDidHide() {}
 
   render() {
-    const { province, city } = this.state;
+    const { city } = this.state;
     return (
       <View className="index">
         <View style={{ minHeight: "300px", textAlign: "center" }}>
-          <Weather province={province} city={city} />
+          <Weather city={city} />
         </View>
 
         {/* <AtCalendar selectedDate={selectedDate} onSelectDate={this.onSelectedDate} /> */}

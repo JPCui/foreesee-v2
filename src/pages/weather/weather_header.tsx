@@ -6,16 +6,32 @@ import "../components/calendar/style/calendar.scss";
 import "taro-ui/dist/style/components/grid.scss";
 import "taro-ui/dist/style/components/flex.scss";
 import "./style/weather.scss";
-import { WeatherHeaderProps, WindDirection } from "./props/weather_header";
+import {
+  BgCodeMap,
+  WeatherHeaderProps,
+  WeatherHeaderState,
+  WindDirection
+} from "./props/weather_header";
 import "./style/weather_header.scss";
 import { navigateTo } from "../../sdk/page";
 
-export default class WeatherHeader extends React.Component<WeatherHeaderProps> {
+export default class WeatherHeader extends React.Component<
+  WeatherHeaderProps,
+  WeatherHeaderState
+> {
   constructor(props) {
     super(props);
+    this.state = {
+      isDay: false
+    };
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    const d = new Date();
+    if (d.getHours() < 18) {
+      this.setState({ isDay: true });
+    }
+  }
 
   componentDidMount() {}
 
@@ -33,31 +49,35 @@ export default class WeatherHeader extends React.Component<WeatherHeaderProps> {
 
   render() {
     const {
+      alarm,
       label,
       weather,
       weather_code,
       degree,
       humidity,
       wind_power,
-      wind_direction
+      wind_direction,
+      tips
     } = this.props;
-    let bg = null;
-    if (weather.indexOf("沙") != -1) {
-      bg = "linear-gradient(-180deg,#c09461,#eedfa1)";
-    } else if (weather.indexOf("雨") != -1) {
-      bg = "linear-gradient(-180deg,#43697f,#abd2d7)";
-    } else {
-      // 晴、多云
-      bg = "linear-gradient(-180deg,#3bbcff,#4af4ff)";
-    }
+
     const weatherIcon = weather_code
       ? `https://mat1.gtimg.com/pingjs/ext2020/weather/pc/icon/currentweather/day/${weather_code}.png`
       : null;
+
+    const { isDay } = this.state;
+    const alarms = {};
+    alarm &&
+      Object.values(alarm).forEach(a => {
+        if (!alarms[a.type_name]) {
+          alarms[a.type_name] = a;
+        }
+      });
+
+    const bg = isDay ? `weather_bg_${BgCodeMap[weather_code]}` : "night";
     return (
       <View
-        className={`header weather_bg weather_bg_${weather_code}`}
+        className={`header weather_bg ${bg}`}
         style={{
-          // backgroundImage: `${bg}`,
           color: "white"
         }}
       >
@@ -65,21 +85,26 @@ export default class WeatherHeader extends React.Component<WeatherHeaderProps> {
           <View className="location" />
           {label}&nbsp;▼
         </View>
-        <View className="at-row">
-          {/*<View>{weather}</View>*/}
-          <View className="at-col left">
-            {weatherIcon && (
-              <Image
-                src={weatherIcon}
-                style={{ width: "100px", height: "100px" }}
-              />
-            )}
-          </View>
-          <View className="at-col right">
+        {/* TIP */}
+        <View className="tip-sm">
+          {tips && tips.forecast_24h ? tips.forecast_24h[0] : " "}
+        </View>
+        {/* 天气 */}
+        <View className="at-row" style={{ marginTop: "30px" }}>
+          <View className="at-col">
             <View className="tip-lg">
               {degree}°
-              <View className="tip-md" style={{ display: "inline-block" }}>
-                {weather}
+              <View
+                className="tip-md"
+                style={{ width: "50px", display: "inline-block" }}
+              >
+                {weatherIcon && (
+                  <Image
+                    src={weatherIcon}
+                    style={{ width: "40px", height: "40px" }}
+                  />
+                )}
+                <View>{weather}</View>
               </View>
             </View>
 

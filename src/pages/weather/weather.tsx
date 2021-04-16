@@ -17,6 +17,7 @@ import { WeatherHeaderProps } from "./props/weather_header";
 import Taro from "@tarojs/taro";
 import Living from "./living";
 import { AtNoticebar } from "taro-ui";
+import { CityInfo } from "../search/props/search";
 
 export default class Weather extends React.Component<
   WeatherProps,
@@ -26,6 +27,10 @@ export default class Weather extends React.Component<
     super(props);
     this.state = {
       weatherHeaderProps: {
+        tips: {
+          forecast_24h: [""]
+        },
+        alarm: [],
         label: "",
         degree: "",
         weather: "",
@@ -46,13 +51,12 @@ export default class Weather extends React.Component<
   }
 
   componentWillMount() {
-    const { province, city } = this.props;
-    this.getDailyWeathers(province, city);
+    const { city } = this.props;
+    this.getDailyWeathers(city);
 
     const _this = this;
     Taro.eventCenter.on("onSelectItem", item => {
-      console.log("listen: ", item);
-      _this.getDailyWeathers(item.province, item.city);
+      _this.getDailyWeathers(item);
     });
   }
 
@@ -69,9 +73,9 @@ export default class Weather extends React.Component<
    * @param provice
    * @param city
    */
-  getDailyWeathers = async (provice, city: string) => {
+  getDailyWeathers = async (city: CityInfo) => {
     const weatherResp: any = await call(
-      Service.Weather + `&province=${provice}&city=${city}&county=`
+      Service.Weather + `&province=${city.province}&city=${city.city}&county=`
     );
 
     // 获取未来一周的天气
@@ -84,8 +88,12 @@ export default class Weather extends React.Component<
     }
 
     const observe = weatherResp.data.observe;
+    const alarm = weatherResp.data.alarm;
+    const tips = weatherResp.data.tips;
     const weatherHeaderProps: WeatherHeaderProps = {
-      ...observe
+      ...observe,
+      alarm,
+      tips
     };
 
     const livings = weatherResp.data.index;
@@ -97,8 +105,8 @@ export default class Weather extends React.Component<
   };
 
   render() {
-    console.log("state", this.state);
-    const { province, city, district } = this.props;
+    const cityInfo = this.props.city;
+    const { province, city, district } = cityInfo;
     const showCity = district ? city + " " + district : province + " " + city;
     const {
       livings,
@@ -108,6 +116,8 @@ export default class Weather extends React.Component<
     return (
       <View>
         <WeatherHeader
+          tips={weatherHeader.tips}
+          alarm={weatherHeader.alarm}
           label={showCity}
           degree={weatherHeader.degree}
           weather={weatherHeader.weather}

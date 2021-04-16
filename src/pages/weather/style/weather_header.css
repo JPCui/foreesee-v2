@@ -16,21 +16,44 @@
     margin: 50px 0 0 50px;
     line-height: 110px; }
   .header .right {
-    margin: 70px 0 0 90px; }
-  .header .tip-sm {
-    font-size: 30px; }
-  .header .tip-md {
-    font-size: 50px; }
-  .header .tip-lg {
-    font-size: 160px; }
+    margin: 70px 50px 0 30px; }
+  .header .tip {
+    text-align: center; }
+    .header .tip-sm {
+      margin-top: 20px;
+      font-size: 30px;
+      min-height: 30px;
+      line-height: 30px; }
+    .header .tip-md {
+      font-size: 50px; }
+    .header .tip-lg {
+      font-size: 160px; }
 
 .weather_bg {
   background-image: linear-gradient(-180deg, #3bbcff, #4af4ff); }
 
-.weather_bg_00 {
-  background-image: linear-gradient(-90deg, #86c3ca, #b5e9e8); }
+.night {
+  background-image: linear-gradient(-180deg, #313877, #44abec); }
 
-.weather_bg_02 {
-  background-image: linear-gradient(-90deg, #86c3ca, #b5e9e8); }
+.weather_bg_C1 {
+  background-image: linear-gradient(-180deg, #86c3ca, #b5e9e8); }
+
+.weather_bg_C3 {
+  background-image: linear-gradient(-180deg, #43697f, #abd2d7); }
+
+.weather_bg_C4 {
+  background-image: linear-gradient(-180deg, #67a1dc, #a8e0f7); }
+
+.weather_bg_C5 {
+  background-image: linear-gradient(-180deg, #81aedc, #a9def1); }
+
+.weather_bg_C6 {
+  background-image: linear-gradient(-180deg, #9b9b96, #c1c1bc); }
+
+.weather_bg_C7 {
+  background-image: linear-gradient(-180deg, #c09461, #eedfa1); }
+
+.weather_bg_C9 {
+  background-image: linear-gradient(-180deg, #50ade8, #7ae0fa); }
 
 /*# sourceMappingURL=weather_header.css.map */

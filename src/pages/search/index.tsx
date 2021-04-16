@@ -5,17 +5,24 @@ import { View } from "@tarojs/components";
 import "taro-ui/dist/style/components/calendar.scss";
 import "taro-ui/dist/style/components/search-bar.scss";
 import "taro-ui/dist/style/components/list.scss"; // 按需引入
-import "taro-ui/dist/style/components/grid.scss";
 import "taro-ui/dist/style/components/flex.scss";
 import "../components/calendar/style/calendar.scss";
+import "./style/search.scss";
 import call from "../../service/request";
 // @ts-ignore
 import { AtList, AtListItem, AtSearchBar } from "taro-ui";
 import Service, { CitySearchResponse } from "../../service/api";
-import { CityInfo, SearchProps, SearchState } from "./props/search";
-import { back, getCurrentPages } from "../../sdk/page";
+import {
+  CityInfo,
+  pushCityInfo,
+  SearchProps,
+  SearchState
+} from "./props/search";
+import { back } from "../../sdk/page";
 // @ts-ignore
 import Taro from "@tarojs/taro";
+
+const KEY_HOTS = "hots";
 
 export default class SearchComponent extends Component<
   SearchProps,
@@ -24,12 +31,50 @@ export default class SearchComponent extends Component<
   constructor(props) {
     super(props);
     this.state = {
+      isOnSearch: false,
       keyword: "",
-      items: {}
+      items: {},
+      histories: [],
+      hots: [
+        new CityInfo("北京", "北京", ""),
+        new CityInfo("上海", "上海", ""),
+        new CityInfo("广东", "广州", ""),
+
+        new CityInfo("广东", "深圳", ""),
+        new CityInfo("河南", "郑州", ""),
+        new CityInfo("辽宁", "沈阳", ""),
+
+        new CityInfo("浙江", "杭州", ""),
+        new CityInfo("重庆", "重庆", ""),
+        new CityInfo("四川", "成都", ""),
+
+        new CityInfo("海南", "三亚", ""),
+        new CityInfo("山东", "青岛", ""),
+        new CityInfo("云南", "大理", "")
+      ]
     };
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    const key = KEY_HOTS;
+    const _this = this;
+    Taro.getStorage({
+      key,
+      fail: (res: Taro.getStorage.General.CallbackResult) => {
+        _this.setState({ histories: res.data || [] });
+      },
+      success: (res: Taro.getStorage.SuccessCallbackResult<CityInfo[]>) => {
+        let arr: CityInfo[] = res.data || [];
+        Taro.setStorage({
+          key,
+          data: arr,
+          success: () => {
+            _this.setState({ histories: arr });
+          }
+        });
+      }
+    });
+  }
 
   componentDidMount() {}
 
@@ -44,23 +89,57 @@ export default class SearchComponent extends Component<
    * @param item
    */
   onSelectCity = (item: string): number => {
+    console.log("select city: ", item);
     // item
     const arr = item.split(", ");
-    const cityInfo: CityInfo = {
-      province: arr[0],
-      city: arr[1],
-      district: arr[2]
-    };
+    const cityInfo: CityInfo = new CityInfo(arr[0], arr[1], arr[2]);
 
-    console.log(this.props.onSelectCity);
-    // this.props.onSelectCity(cityInfo);
-
+    this.saveToHistory(cityInfo);
     // 触发事件
     Taro.eventCenter.trigger("onSelectItem", cityInfo);
 
     back();
     return 1;
   };
+
+  saveToHistory(c: CityInfo) {
+    const key = KEY_HOTS;
+    const _this = this;
+    Taro.getStorage({
+      key,
+      fail: (res: Taro.getStorage.General.CallbackResult) => {
+        Taro.setStorage({
+          key,
+          data: [c],
+          success: () => {
+            _this.setState({ histories: [c] });
+          }
+        });
+      },
+      success: (res: Taro.getStorage.SuccessCallbackResult<CityInfo[]>) => {
+        let arr: CityInfo[] = res.data || [];
+        if (arr.length >= 9) {
+          arr = arr.slice(0, 8);
+        }
+        arr = pushCityInfo(arr, c);
+        Taro.setStorage({
+          key,
+          data: arr,
+          success: () => {
+            _this.setState({ histories: arr });
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   *   清除历史
+   */
+  clearHistory() {
+    const key = KEY_HOTS;
+    Taro.clearStorage({ key });
+  }
 
   async onKeywordInput(keyword) {
     if (!keyword) return;
@@ -73,31 +152,79 @@ export default class SearchComponent extends Component<
       return;
     }
     const items = resp.data.internal;
-    this.setState({ items });
+    this.setState({ items, isOnSearch: true });
+  }
+
+  onClearSearch() {
+    this.setState({ isOnSearch: false });
   }
 
   render() {
-    const { items } = this.state;
+    const { hots, histories, items, isOnSearch } = this.state;
+    console.log("histories", histories);
 
     return (
-      <View className="index">
+      <View className="index" id="search-box">
         <AtSearchBar
           actionName="搜索"
           onActionClick={this.onKeywordInput.bind(this)}
           onChange={this.onKeywordInput.bind(this)}
+          onClear={this.onClearSearch}
           value={this.state.keyword}
         />
-        <AtList>
-          {Object.values(items)?.map((item: string, idx) => {
-            return (
-              <AtListItem
-                key={idx}
-                title={item}
-                onClick={this.onSelectCity.bind(this, item)}
-              />
-            );
-          })}
-        </AtList>
+        <View className="search-select-area" hidden={!isOnSearch}>
+          <View className="search-block" hidden={false}>
+            <View className="search-item-title">当前定位</View>
+          </View>
+          <View className="search-block" hidden={hots.length == 0}>
+            <View className="search-item-title">热门城市</View>
+            <View className="at-row at-row--wrap">
+              {hots.map((c: CityInfo) => {
+                return (
+                  <View className="at-col at-col-4">
+                    <View
+                      className="search-item"
+                      onClick={() => this.onSelectCity(c.showDetail())}
+                    >
+                      {c.showSimple()}
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+          <View className="search-block" hidden={histories.length == 0}>
+            <View className="search-item-title">历史记录</View>
+            <View className="at-row at-row--wrap">
+              {histories.map((c: CityInfo) => {
+                c = new CityInfo(c.province, c.city, c.district);
+                return (
+                  <View className="at-col at-col-4">
+                    <View
+                      className="search-item"
+                      onClick={() => this.onSelectCity(c.showDetail())}
+                    >
+                      {c.showSimple()}
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        </View>
+        <View hidden={isOnSearch}>
+          <AtList>
+            {Object.values(items)?.map((item: string, idx) => {
+              return (
+                <AtListItem
+                  key={idx}
+                  title={item}
+                  onClick={this.onSelectCity.bind(this, item)}
+                />
+              );
+            })}
+          </AtList>
+        </View>
       </View>
     );
   }
