@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,4BAA6B;EAE3B,OAAO,EAAE,IAAI;;AAGf,SAAU;EACR,UAAU,EAAE,IAAI",
+"sources": ["daily_weather.scss"],
+"names": [],
+"file": "daily_weather.css"
+}

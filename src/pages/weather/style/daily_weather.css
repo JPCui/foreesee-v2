@@ -1,0 +1,7 @@
+.scroll-y::-webkit-scrollbar {
+  display: none; }
+
+.scroll-y {
+  overflow-x: auto; }
+
+/*# sourceMappingURL=daily_weather.css.map */

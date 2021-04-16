@@ -7,6 +7,7 @@ import "../components/calendar/style/calendar.scss";
 import "taro-ui/dist/style/components/grid.scss";
 import "taro-ui/dist/style/components/flex.scss";
 import "./style/weather.scss";
+import "./style/daily_weather.scss";
 import Calendar from "taro-ui/types/calendar";
 import * as dayjs from "dayjs";
 import {
@@ -193,7 +194,10 @@ export class DailyWeather extends Component<
     });
 
     return (
-      <View style={{ position: "relative", overflowX: "auto", width: "100%" }}>
+      <View
+        className="scroll-y"
+        style={{ position: "relative", width: "100%" }}
+      >
         <View className="chartBox">
           <View
             className="at-row"

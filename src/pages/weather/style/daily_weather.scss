@@ -1,0 +1,8 @@
+.scroll-y::-webkit-scrollbar {
+  // 隐藏滚动条
+  display: none;
+}
+
+.scroll-y {
+  overflow-x: auto;
+}
