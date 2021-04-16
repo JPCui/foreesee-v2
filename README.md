@@ -1,2 +1,6 @@
-secret: 21d4615456cf45c4b446daf0a31dd277
+# 轻云天气小程序
+
+![](./resources/page.0.png)
+
+![](./resources/qr_code.jpg)
 
