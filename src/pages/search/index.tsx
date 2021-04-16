@@ -89,7 +89,6 @@ export default class SearchComponent extends Component<
    * @param item
    */
   onSelectCity = (item: string): number => {
-    console.log("select city: ", item);
     // item
     const arr = item.split(", ");
     const cityInfo: CityInfo = new CityInfo(arr[0], arr[1], arr[2]);
@@ -142,8 +141,8 @@ export default class SearchComponent extends Component<
   }
 
   async onKeywordInput(keyword) {
-    if (!keyword) return;
     this.setState({ keyword });
+    if (!keyword) return;
     const resp: CitySearchResponse = (await call(
       Service.CITY_SEARCH + "city=" + keyword
     )) as CitySearchResponse;
@@ -155,13 +154,19 @@ export default class SearchComponent extends Component<
     this.setState({ items, isOnSearch: true });
   }
 
-  onClearSearch() {
+  onClearSearch = () => {
     this.setState({ isOnSearch: false });
-  }
+  };
+
+  onBlurSearch = () => {
+    const { keyword } = this.state;
+    if (!keyword) {
+      this.onClearSearch();
+    }
+  };
 
   render() {
     const { hots, histories, items, isOnSearch } = this.state;
-    console.log("histories", histories);
 
     return (
       <View className="index" id="search-box">
@@ -170,9 +175,10 @@ export default class SearchComponent extends Component<
           onActionClick={this.onKeywordInput.bind(this)}
           onChange={this.onKeywordInput.bind(this)}
           onClear={this.onClearSearch}
+          onBlur={this.onBlurSearch}
           value={this.state.keyword}
         />
-        <View className="search-select-area" hidden={!isOnSearch}>
+        <View className={`search-select-area ${isOnSearch ? "hide" : ""}`}>
           <View className="search-block" hidden={false}>
             <View className="search-item-title">当前定位</View>
           </View>
@@ -212,7 +218,7 @@ export default class SearchComponent extends Component<
             </View>
           </View>
         </View>
-        <View hidden={isOnSearch}>
+        <View className={`${!isOnSearch ? "hide" : ""}`}>
           <AtList>
             {Object.values(items)?.map((item: string, idx) => {
               return (

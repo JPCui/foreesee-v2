@@ -1,3 +1,6 @@
+.hide {
+  display: none; }
+
 #search-box .search-block {
   margin-top: 50px; }
 #search-box .search-select-area {
