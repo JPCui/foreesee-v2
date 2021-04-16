@@ -56,6 +56,8 @@ export default class SearchComponent extends Component<
   }
 
   componentWillMount() {
+    Taro.setNavigationBarTitle({ title: "城市搜索" });
+
     const key = KEY_HOTS;
     const _this = this;
     Taro.getStorage({
