@@ -1,5 +1,5 @@
 export default {
-  pages: ["pages/index/index", "pages/search/index"],
+  pages: ["pages/index/index", "pages/search/index", "pages/wxa_login/index"],
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",

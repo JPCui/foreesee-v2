@@ -21,6 +21,7 @@ import {
 import { back } from "../../sdk/page";
 // @ts-ignore
 import Taro from "@tarojs/taro";
+import MapService from "../../service/map";
 
 const KEY_HOTS = "hots";
 
@@ -35,6 +36,7 @@ export default class SearchComponent extends Component<
       keyword: "",
       items: {},
       histories: [],
+      currLocation: new CityInfo("", "", ""),
       hots: [
         new CityInfo("北京", "北京", ""),
         new CityInfo("上海", "上海", ""),
@@ -58,12 +60,33 @@ export default class SearchComponent extends Component<
   componentWillMount() {
     Taro.setNavigationBarTitle({ title: "城市搜索" });
 
+    // 初始化当前城市
+    Taro.getLocation({
+      type: "wgs84",
+      success: async res => {
+        // FIXIT
+        const location = await MapService.GetLocation(false);
+        const currLocation: CityInfo = new CityInfo(
+          location.ad_info.province,
+          location.ad_info.city,
+          location.ad_info.district
+        );
+        this.setState({ currLocation });
+      }
+    });
+
+    // 初始化历史搜索
     const key = KEY_HOTS;
     const _this = this;
     Taro.getStorage({
       key,
       fail: (res: Taro.getStorage.General.CallbackResult) => {
-        _this.setState({ histories: res.data || [] });
+        try {
+          console.error(res);
+          _this.setState({ histories: res.data || [] });
+        } catch (e) {
+          console.error(e);
+        }
       },
       success: (res: Taro.getStorage.SuccessCallbackResult<CityInfo[]>) => {
         let arr: CityInfo[] = res.data || [];
@@ -90,11 +113,8 @@ export default class SearchComponent extends Component<
    * 用户选中某个城市后，回调到首页
    * @param item
    */
-  onSelectCity = (item: string): number => {
+  onSelectCity = (cityInfo: CityInfo): number => {
     // item
-    const arr = item.split(", ");
-    const cityInfo: CityInfo = new CityInfo(arr[0], arr[1], arr[2]);
-
     this.saveToHistory(cityInfo);
     // 触发事件
     Taro.eventCenter.trigger("onSelectItem", cityInfo);
@@ -109,13 +129,18 @@ export default class SearchComponent extends Component<
     Taro.getStorage({
       key,
       fail: (res: Taro.getStorage.General.CallbackResult) => {
-        Taro.setStorage({
-          key,
-          data: [c],
-          success: () => {
-            _this.setState({ histories: [c] });
-          }
-        });
+        try {
+          console.error(res);
+          Taro.setStorage({
+            key,
+            data: [c],
+            success: () => {
+              _this.setState({ histories: [c] });
+            }
+          });
+        } catch (e) {
+          console.warn(e);
+        }
       },
       success: (res: Taro.getStorage.SuccessCallbackResult<CityInfo[]>) => {
         let arr: CityInfo[] = res.data || [];
@@ -152,6 +177,7 @@ export default class SearchComponent extends Component<
       console.error(resp);
       return;
     }
+    // FIXIT
     const items = resp.data.internal;
     this.setState({ items, isOnSearch: true });
   }
@@ -168,7 +194,7 @@ export default class SearchComponent extends Component<
   };
 
   render() {
-    const { hots, histories, items, isOnSearch } = this.state;
+    const { hots, histories, items, isOnSearch, currLocation } = this.state;
 
     return (
       <View className="index" id="search-box">
@@ -183,6 +209,16 @@ export default class SearchComponent extends Component<
         <View className={`search-select-area ${isOnSearch ? "hide" : ""}`}>
           <View className="search-block" hidden={false}>
             <View className="search-item-title">当前定位</View>
+            <View className="at-row at-row--wrap" hidden={currLocation == null}>
+              <View className="at-col at-col-4">
+                <View
+                  className="search-item"
+                  onClick={() => this.onSelectCity(currLocation)}
+                >
+                  {currLocation.showSimple()}
+                </View>
+              </View>
+            </View>
           </View>
           <View className="search-block" hidden={hots.length == 0}>
             <View className="search-item-title">热门城市</View>
@@ -192,7 +228,7 @@ export default class SearchComponent extends Component<
                   <View className="at-col at-col-4">
                     <View
                       className="search-item"
-                      onClick={() => this.onSelectCity(c.showDetail())}
+                      onClick={() => this.onSelectCity(c)}
                     >
                       {c.showSimple()}
                     </View>
@@ -210,7 +246,7 @@ export default class SearchComponent extends Component<
                   <View className="at-col at-col-4">
                     <View
                       className="search-item"
-                      onClick={() => this.onSelectCity(c.showDetail())}
+                      onClick={() => this.onSelectCity(c)}
                     >
                       {c.showSimple()}
                     </View>

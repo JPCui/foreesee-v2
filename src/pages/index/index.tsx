@@ -38,7 +38,6 @@ export default class Index extends Component<IndexProps, IndexState> {
       city: new CityInfo(DEFAULT_PROVICE, DEFAULT_CITY, "")
       // http://opendata.baidu.com/api.php?query=2020-4&resource_id=6018&format=json
     };
-    this.getPosition();
   }
 
   // onSelectedDate = async (item: { value: Calendar.SelectedDate }) => {
@@ -50,16 +49,15 @@ export default class Index extends Component<IndexProps, IndexState> {
   // };
 
   getPosition = async () => {
-    const location: GetLocationModel = await MapService.GetLocation();
-    const { province, city } = location.ad_info;
-    this.setState({ city: new CityInfo(province, city, "") });
+    const location: GetLocationModel = await MapService.GetLocation(true);
+    const { province, city, district } = location.ad_info;
+    this.setState({ city: new CityInfo(province, city, district) });
   };
 
-  componentWillMount() {
-    this.getPosition();
-  }
+  componentWillMount() {}
 
   componentDidMount() {
+    this.getPosition();
     const _this = this;
     Taro.eventCenter.on("onSelectItem", item => {
       console.log("listen: ", item);

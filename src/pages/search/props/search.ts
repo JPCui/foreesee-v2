@@ -70,4 +70,5 @@ export interface SearchState {
    * 热门
    */
   hots?: CityInfo[];
+  currLocation: CityInfo;
 }
